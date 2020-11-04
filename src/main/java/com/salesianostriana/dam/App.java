@@ -6,11 +6,20 @@ public class App {
     
     public static void main(String[] args) {
 
-        ServicioMeteorologico servicioMeteorologico = new ServicioMeteorologico();
 
-        Map<String, Double> medias = servicioMeteorologico.mediaMensual("SEVILLA");
+        RepositorioMeteorologico repositorioMeteorologico = new RepositorioMeteorologico();
 
-        medias.forEach((k,v) -> System.out.printf("%s, %.2f\n", k, v));
+        ServicioMeteorologico servicioMeteorologico = new ServicioMeteorologico(repositorioMeteorologico);
+
+        Map<String, Double> mediaMensual = servicioMeteorologico.mediaMensual("SEVILLA", repositorioMeteorologico.getDatos());
+
+        mediaMensual.forEach((k,v) -> System.out.printf("%s, %.2f\n", k, v));
+
+        Map<String, Double> mediaDiaSemana = servicioMeteorologico.mediaDiaSemana("SEVILLA", repositorioMeteorologico.getDatos());
+
+        mediaDiaSemana.forEach((k,v) -> System.out.printf("%s, %.2f\n", k, v));
+
+
 
 
     }
