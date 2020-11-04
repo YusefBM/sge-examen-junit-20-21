@@ -19,10 +19,10 @@ public class ServicioMeteorologico {
 
     /**
      * Constructor sin parámetros
+     * Orientado a usar los métodos que reciben
+     * la lista de datos como argumento
      */
-    public ServicioMeteorologico() {
-        repositorioMeteorologico = new RepositorioMeteorologico();
-    }
+    public ServicioMeteorologico() { }
 
     /**
      * Constructor con parámetros
@@ -34,8 +34,7 @@ public class ServicioMeteorologico {
 
     /**
      * Método que devuelve la media mensual de precipitaciones para una población
-     * Utiliza los datos del repositorio que se ha instanciado o pasado como
-     * argumento al servicio
+     * Utiliza los datos del repositorio que se ha pasado como argumento al servicio
      * @param poblacion
      * @return Mapa de tipo clave = Mes, valor = Media de precipitaciones de ese mes
      */
@@ -45,7 +44,7 @@ public class ServicioMeteorologico {
 
     /**
      * Método que devuelve la media mensual de precipitaciones para una población
-     * Utiliza los datos del que se le pasan como argumento
+     * Utiliza los datos del que se le pasan como argumento al método
      * @param poblacion
      * @param datos Listado de datos meteorológicos a utilizar para el cálculo
      * @return Mapa de tipo clave = Mes, valor = Media de precipitaciones de ese mes
@@ -79,11 +78,24 @@ public class ServicioMeteorologico {
         return result;
     }
 
+    /**
+     * Método que devuelve la media de precipitaciones para cada día de la semana para una población
+     * Utiliza los datos del repositorio que se ha pasado como argumento al servicio
+     * @param poblacion
+     * @param datos Listado de datos meteorológicos a utilizar para el cálculo
+     * @return Mapa de tipo clave = Mes, valor = Media de precipitaciones de ese mes
+     */
     public Map<String, Double> mediaDiaSemana(String poblacion) {
         return mediaDiaSemana(poblacion, repositorioMeteorologico.getDatos());
     }
 
-
+    /**
+     * Método que devuelve la media de precipitaciones para cada día de la semana para una población
+     * Utiliza los datos del que se le pasan como argumento al método
+     * @param poblacion
+     * @param datos Listado de datos meteorológicos a utilizar para el cálculo
+     * @return Mapa de tipo clave = Mes, valor = Media de precipitaciones de ese mes
+     */
     public Map<String, Double> mediaDiaSemana(String poblacion, List<DatoMeteorologico> datos) {
         List<DatoMeteorologico> filtrados =
                 filtrarPorPoblacion(poblacion, datos);
@@ -114,15 +126,33 @@ public class ServicioMeteorologico {
     }
 
 
-
+    /**
+     * Método privado que recibe una fecha y devuelve
+     * el mes como cadena de caracteres en mayúsculas
+     * @param date
+     * @return
+     */
     private String fechaAMes(LocalDate date) {
-        return date.getMonth().getDisplayName(TextStyle.FULL, new Locale("es"));
+        return date.getMonth().getDisplayName(TextStyle.FULL, new Locale("es")).toUpperCase();
     }
 
+    /**
+     * Método privado que recibe una fecha y devuelve
+     * el día de la semana como cadena de caracteres en mayúsculas
+     * @param date
+     * @return
+     */
     private String fechaADiaSemana(LocalDate date) {
-        return date.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es"));
+        return date.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es")).toUpperCase();
     }
 
+    /**
+     * Método privado que filtra los datos meteorológicos de una lista, dejando sólo
+     * aquellos cuya población coincida con la cadena pasada como argumento
+     * @param poblacion Población cuyos datos queremos obtener
+     * @param datos Listado de datos meteorologicos
+     * @return Sólo los datos de la población pasada como argumento
+     */
     private List<DatoMeteorologico> filtrarPorPoblacion(String poblacion, List<DatoMeteorologico> datos) {
         return datos
                         .stream()
