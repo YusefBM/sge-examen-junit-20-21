@@ -1,10 +1,7 @@
 package com.salesianostriana.dam;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.time.format.TextStyle;
-import java.time.temporal.TemporalField;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -79,10 +76,27 @@ public class ServicioMeteorologico {
     }
 
     /**
+     * Método que calcula la media de precipitación de una población
+     * para un mes concreto
+     * @param poblacion Población para la que se hace la consulta
+     * @param mes Mes sobre el que se calcula la media.
+     * @param datos sobre los que se realiza la búsqueda
+     * @return
+     */
+    public double mediaDeUnMes(String poblacion, String mes, List<DatoMeteorologico> datos) {
+        String filtroMes = mes.toUpperCase();
+        OptionalDouble result =  datos.stream()
+                        .filter(datoMeteorologico -> fechaAMes(datoMeteorologico.getFecha()).equalsIgnoreCase(mes))
+                        .filter(datoMeteorologico -> datoMeteorologico.getCiudad().equalsIgnoreCase(poblacion))
+                        .mapToDouble(dato -> dato.getPrecipitacion())
+                        .average();
+        return result.orElse(0.0);
+    }
+
+    /**
      * Método que devuelve la media de precipitaciones para cada día de la semana para una población
      * Utiliza los datos del repositorio que se ha pasado como argumento al servicio
      * @param poblacion
-     * @param datos Listado de datos meteorológicos a utilizar para el cálculo
      * @return Mapa de tipo clave = Mes, valor = Media de precipitaciones de ese mes
      */
     public Map<String, Double> mediaDiaSemana(String poblacion) {
